@@ -1,0 +1,979 @@
+/* ==========================================================================
+   Foobarcat — single source of truth for site styling.
+   Base + layout + components. Linked from _layouts/default.html and
+   _layouts/post.html; index.html (the splash) links it too and adds only
+   its own splash-specific rules.
+   ========================================================================== */
+
+/* --- Design tokens ------------------------------------------------------ */
+:root {
+  color-scheme: dark;
+  --bg: #121212;
+  --bg-raise: #1b1b1b;
+  --line: #2c2c2c;
+  --accent: #54cdf2;
+  --accent-2: #21a1f1;
+  --glow: rgba(84, 205, 242, 0.10);
+}
+
+/* --- Self-hosted fonts -------------------------------------------------- */
+/* woff2, subset to Latin; generated from the OFL sources (see decisions.md
+   2026-06-28 + private/design). No third-party CDN — the site renders the
+   same, offline-capable, from its own origin. */
+@font-face {
+  font-family: 'Spectral';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/assets/fonts/spectral-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Spectral';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/assets/fonts/spectral-italic.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Spectral';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/assets/fonts/spectral-600.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Spectral';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/assets/fonts/spectral-700.woff2') format('woff2');
+}
+/* Space Grotesk 700 — homepage wordmark only (subset to the 7 wordmark glyphs). */
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 700;
+  /* Preloaded (homepage only) same-origin 1KB subset — with `optional` it wins
+     the ~100ms race virtually always, so the wordmark never swaps size mid-load
+     (avoids the fallback-metrics "small → pops large" FOUT). */
+  font-display: optional;
+  src: url('/assets/fonts/space-grotesk-700.woff2') format('woff2');
+}
+/* Public Sans — body / UI sans. Variable: a single woff2 spans the whole weight
+   axis (so 400 body + 700 bold come from one file), subset to Latin from the OFL
+   source (Google Fonts v21, 2026-06-29). See decisions.md + visual-identity.md. */
+@font-face {
+  font-family: 'Public Sans';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/assets/fonts/public-sans.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Public Sans';
+  font-style: italic;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/assets/fonts/public-sans-italic.woff2') format('woff2');
+}
+
+/* --- Base --------------------------------------------------------------- */
+body {
+  font-family: 'Public Sans', system-ui, -apple-system, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: #ffffff;
+  line-height: 1.6; /* single source: paragraphs, lists, cells all inherit this */
+}
+
+/* Serif helper — strapline / pillar titles. Resolves to the self-hosted
+   Spectral above, with Georgia as the fallback while it loads. */
+.serif {
+  font-family: 'Spectral', Georgia, serif;
+}
+
+/* Universal link colours */
+a,
+a:visited {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--accent-2);
+  text-decoration: underline;
+}
+
+hr {
+  margin-top: 2.25rem;
+  margin-bottom: 2.25rem;
+}
+
+/* --- Layout ------------------------------------------------------------- */
+.page {
+  max-width: 800px;
+  margin: 0 auto;
+  /* No bottom padding: the gap before the footer is owned solely by the footer's
+     own margin-top (single source). A non-zero bottom padding here would stack
+     with that margin instead of collapsing, double-counting the footer gap. */
+  padding: 2.5rem 1.5rem 0;
+}
+/* Homepage runs wider — the Writing grid (4-up tiles / 3-up cards) and the
+   side-by-side pillars need the extra room. Opt-in via body_class: home. */
+.page.home {
+  max-width: 940px;
+}
+
+/* --- Navigation --------------------------------------------------------- */
+nav ul {
+  list-style: none;
+  padding: 1.2rem 0;
+  margin: 0;
+  display: flex;
+  gap: clamp(0.6rem, 2.4vw, 18px); /* fluid: collapses toward the floor on phones so the caps items stay on one line */
+  justify-content: center;
+  border-bottom: 1px solid #333333;
+}
+nav ul li a {
+  text-decoration: none;
+  color: var(--accent);
+  transition: color 0.3s;
+  /* Fluid type: scales with viewport so the caps items fit one line whatever
+     the body font's metrics are (a self-hosted sans is typically wider than the
+     old system stack, and caps add width again). Desktop cap unchanged at 0.95rem; floor raised to
+     0.8rem (~12.8px) when Contact went (6→5 items); now 4 items, so the floor
+     only binds below ~376px and has more headroom than it needs. */
+  font-size: clamp(0.8rem, 3.4vw, 0.95rem);
+  text-transform: uppercase;
+  letter-spacing: 0.08em; /* caps carry more of the site's wide-tracked uppercase voice now there's room */
+  white-space: nowrap;    /* never break a label mid-word */
+}
+nav ul li a:hover {
+  color: var(--accent-2);
+  text-decoration: none; /* nav links don't underline on hover */
+}
+
+/* --- Typography --------------------------------------------------------- */
+h1 {
+  margin-top: 1.8rem;
+  margin-bottom: 0.75rem;
+  font-family: 'Spectral', Georgia, serif;
+  font-size: 2rem;
+  line-height: 1.15; /* tight leading so wrapped serif titles don't gap */
+  color: #ffffff;
+}
+h2 {
+  font-family: 'Spectral', Georgia, serif;
+  font-size: 1.3rem;
+  line-height: 1.2;
+  margin-top: 1.8rem;
+  margin-bottom: 0.5rem;
+  color: #ededed; /* quieter than the h1 title (#fff) so section heads don't shout */
+}
+/* Sub-headings continue the h1/h2 scale (same Spectral voice) so a `###` in a
+   post reads as a heading, not the browser's default sans. h4-h6 are unused
+   today but defined so a future one can't fall to a UA default either. */
+h3 {
+  font-family: 'Spectral', Georgia, serif;
+  font-size: 1.12rem;
+  line-height: 1.25;
+  margin-top: 1.5rem;
+  margin-bottom: 0.4rem;
+  color: #ededed;
+}
+h4 {
+  font-family: 'Spectral', Georgia, serif;
+  font-size: 1rem;
+  line-height: 1.3;
+  margin-top: 1.3rem;
+  margin-bottom: 0.35rem;
+  color: #ededed;
+}
+h5, h6 {
+  font-family: 'Spectral', Georgia, serif;
+  font-size: 0.95rem;
+  line-height: 1.3;
+  margin-top: 1.2rem;
+  margin-bottom: 0.3rem;
+  color: #ededed;
+}
+p {
+  color: #dddddd;
+}
+/* Editorial quote: flush-left with a subtle accent bar, not the browser's
+   40px-each-side inset (which is why `>` looked overindented before). */
+blockquote {
+  margin: 1.2rem 0;                 /* vertical spacing only — no side indent */
+  padding: 0.2rem 0 0.2rem 1rem;    /* small left gutter for the rule */
+  border-left: 3px solid var(--line);
+  color: #cfcfcf;                   /* a touch quieter than body text */
+}
+/* Inline code: a quiet chip echoing the code-block surface (article pre), so
+   inline and block code read as one treatment instead of bare monospace. */
+code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.9em;
+  background: var(--bg-raise);
+  padding: 0.1em 0.35em;
+  border-radius: 3px;
+}
+main {
+  color: #dddddd;
+}
+/* Drop the trailing margin so the content→footer gap is exactly the footer's
+   margin-top, regardless of what the last block is (paragraph, card, list). */
+main > :last-child {
+  margin-bottom: 0;
+}
+ul, ol {
+  padding-left: 2rem;
+}
+/* A paragraph that directly introduces a list should read as one unit with it.
+   :has() lets us tighten the seam for any lead-in + list — ordered or unordered,
+   HTML or markdown — with no per-list markup. */
+p:has(+ ul),
+p:has(+ ol) {
+  margin-bottom: 0;
+}
+p + ul,
+p + ol {
+  margin-top: 0;
+}
+main li::marker {
+  color: currentColor;
+}
+
+/* --- Footer ------------------------------------------------------------- */
+/* Two rows: an icon row (GitHub · LinkedIn · RSS) above the credit line.
+   Sits outside .page, so constrain + centre it to align the top rule with
+   the page content rather than full-bleeding. */
+footer.site-footer {
+  max-width: 800px;
+  /* Single source for the content→footer-rule gap. Matched to the nav's content
+     gap (first element's 1.8rem margin-top) so the two page-boundary rules frame
+     the content symmetrically — top and bottom. Section eyebrows stay tighter. */
+  margin: 1.8rem auto 0;
+  padding: 1.5rem 1.5rem;
+  border-top: 1px solid var(--line);
+  font-size: 0.85rem;
+  color: #888888;
+  text-align: center;
+}
+.foot-social {
+  display: flex;
+  gap: 22px;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 0.8rem;
+}
+.foot-social a {
+  color: #b9b9b9;
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  transition: color 0.3s; /* matches nav — grouped link rows behave alike */
+}
+.foot-social a:hover {
+  color: var(--accent);
+  text-decoration: none; /* grouped link row, like nav — no hover underline */
+}
+.foot-social svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+/* The envelope artwork is inset within its viewBox and landscape, so at 20px it
+   reads small next to the box-filling GitHub/LinkedIn marks — scale it up to
+   optically match the rest of the row. */
+.foot-social .foot-mail {
+  width: 26px;
+  height: 26px;
+}
+
+/* --- Hero image (consulting / projects) --------------------------------- */
+.hero {
+  margin: 1rem 0 1.5rem;
+}
+.hero img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+}
+
+/* --- About page --------------------------------------------------------- */
+.about-layout {
+  display: grid;
+  align-items: start;
+  column-gap: 28px;
+  row-gap: 0;
+  margin-top: 2rem;
+  grid-template-columns: 1fr 1.2fr;
+  grid-template-areas:
+    "photo heading"
+    "photo text";
+}
+.about-sidebar {
+  grid-area: photo;
+}
+.about-photo {
+  display: block;
+  max-width: 400px; /* matches the exported width */
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.35);
+  margin-top: -10px;
+}
+
+/* Credibility rail — quiet metadata under the portrait, not prose. */
+.about-credentials {
+  margin-top: 1.5rem;
+  font-family: 'Public Sans', system-ui, -apple-system, sans-serif;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #888888;
+}
+.about-credentials .cred-name {
+  margin: 0 0 0.9rem;
+  font-family: 'Spectral', Georgia, serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: #ffffff;
+}
+.about-credentials .cred-label {
+  margin: 0 0 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.72rem;
+  color: #777777;
+}
+.about-credentials .cred-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 0.95rem;
+}
+.about-credentials .cred-list li {
+  margin-bottom: 0.3rem;
+}
+.about-credentials .cred-degree {
+  margin: 0.9rem 0 0;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--line);
+}
+.about-credentials .cred-org {
+  color: #dddddd;
+}
+.about-credentials .cred-link {
+  display: inline-block;
+  margin-top: 1rem;
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
+  color: #ededed; /* quiet by default — blue on hover, matching the site's link voice */
+}
+.about-credentials .cred-link:hover {
+  color: var(--accent);
+  text-decoration: none;
+}
+.about-column {
+  flex: 1;
+  min-width: 320px;
+  grid-area: text;
+}
+.about-heading {
+  grid-area: heading;
+}
+.about-heading h1 {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+  font-size: 2rem;
+}
+.about-column p {
+  margin-top: 0;
+  margin-bottom: 0.9rem;
+}
+
+/* --- Projects page ------------------------------------------------------ */
+.project {
+  margin-bottom: 1.5rem;
+}
+.project img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-top: 0.75rem;
+}
+
+/* --- Writing index: post list & editorial layout ------------------------ */
+.post-list {
+  margin-top: 1.2rem;
+  list-style: none;
+  padding-left: 0;
+}
+.post-list li {
+  margin: 0 0 0.8rem 0;
+}
+.post-list li a {
+  display: inline-block;
+  line-height: 1.25;
+}
+.post-list .post-summary {
+  margin-top: 0.03rem;
+  margin-bottom: 0.03rem;
+  line-height: 1.35;
+  color: #dddddd;
+  font-weight: 300;
+  font-size: 0.95rem;
+  max-width: 30rem;
+}
+.post-list small {
+  display: block;
+  margin-top: 0.14rem;
+  line-height: 1.25;
+  color: #aaaaaa;
+}
+.editorial-list .post-item {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  padding: 1rem 0;
+}
+.editorial-list .post-body {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.editorial-list .post-thumb img {
+  width: 200px;
+  max-width: 220px;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 6px;
+  display: block;
+}
+/* Blog-index article title (the post link). Serif, with real heading
+   size/weight so Spectral's smaller x-height doesn't read smaller than the
+   summary beneath it. */
+.editorial-list .post-body > a {
+  font-family: 'Spectral', Georgia, serif;
+  font-size: 1.16rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: #ededed; /* quiet by default — blue is a hover event, like .rcard */
+}
+.editorial-list .post-body > a:hover {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+/* --- Writing index: category filter pills ------------------------------- */
+.category-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 1rem 0 0.5rem;
+}
+.filter-pill {
+  font: inherit;
+  font-size: 0.85rem;
+  color: #ffffff;
+  background: transparent;
+  border: 1px solid #333333;
+  border-radius: 999px;
+  padding: 0.3rem 0.8rem;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+.filter-pill:hover {
+  color: var(--accent-2);
+  border-color: #555555;
+}
+.filter-pill.is-active {
+  color: #121212;
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.post-item.hidden {
+  display: none;
+}
+
+/* --- Post (article) page ------------------------------------------------ */
+article {
+  max-width: 100%;
+  overflow-x: auto;
+}
+article img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 1rem 0;
+}
+/* Blog post hero. A named hook so the hero is addressable separately from inline
+   `article img` and from the rounded `.hero` on the Projects/Consulting pages.
+   Square-cornered by design; spacing currently matches inline images (1rem 0). */
+.article-hero {
+  margin: 1rem 0;
+}
+article table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  font-size: 0.95em;
+  display: block;
+  overflow-x: auto;
+}
+/* Table cells: readable padding + a hairline rule in the site's --line, so a
+   markdown table isn't left on the browser's zero-padding default. */
+article th,
+article td {
+  padding: 0.4rem 0.7rem;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+article th {
+  font-weight: 600;
+  color: #ffffff;
+}
+article pre {
+  max-width: 100%;
+  overflow-x: auto;
+  padding: 0.75rem;
+  background: #181818;
+  border-radius: 4px;
+}
+/* Block code already has its padded surface — don't double-chip it with the
+   inline `code` background above. */
+article pre code {
+  background: none;
+  padding: 0;
+  font-size: inherit;
+}
+.post-header {
+  padding-bottom: 1.25rem;
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid #333333;
+}
+.post-header > :last-child {
+  margin-bottom: 0;
+}
+.post-header h1 {
+  margin-bottom: 0;   /* let .post-summary's margin-top be the sole title→summary gap (avoids margin-collapse floor) */
+}
+.post-header .post-summary {
+  font-weight: 600;
+  max-width: 42rem;
+  margin-top: 0.3rem;   /* was an uncontrolled 1rem via margin collapse with h1 */
+}
+.post-author {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #f1f1f1;
+  line-height: 1.2;
+}
+.post-meta {
+  margin: 0 0 0.15rem;
+}
+.author-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.25rem;
+}
+.author-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  flex: 0 0 auto;
+  margin: 0;
+}
+.author-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-height: 0;
+}
+.author-meta {
+  margin: 0;
+  line-height: 1.2;
+}
+.media-row {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  margin: 1rem 0;
+}
+.media-row img {
+  width: 280px;
+  max-width: 40%;
+  height: auto;
+  margin: 0;
+  display: block;
+}
+/* Line the text column's first line up with the image top: drop the default
+   top margin the browser gives the leading paragraph. */
+.media-row > div > :first-child {
+  margin-top: 0;
+}
+
+/* --- Responsive --------------------------------------------------------- */
+@media (min-width: 700px) {
+  .post-list .post-summary {
+    opacity: 0.85;
+  }
+}
+
+@media (max-width: 700px) {
+  .editorial-list .post-item {
+    flex-direction: column;
+    align-items: stretch;   /* stacked: fill the column so long titles wrap instead of overflowing (base rule top-aligns the row layout) */
+  }
+  .editorial-list .post-thumb img {
+    width: 100%;
+    max-width: 100%;
+  }
+  .media-row {
+    flex-direction: column;
+  }
+  .media-row img {
+    width: 100%;
+    max-width: 100%;
+  }
+  .about-layout {
+    grid-template-columns: 1fr;
+    row-gap: 28px;
+    grid-template-areas:
+      "heading"
+      "photo"
+      "text";
+  }
+  .about-heading h1 {
+    margin-bottom: 0;
+  }
+  .about-photo {
+    max-width: 100%;
+    margin-top: 0;
+  }
+  .about-column {
+    min-width: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .page {
+    padding: 2rem 1rem 0; /* bottom owned by footer margin-top — see base .page note */
+  }
+  nav ul {
+    /* Centred, not justified. `space-between` was right at 5–6 items, when the
+       labels nearly filled the content width and the leftover slack was small.
+       At 4 items there's ~a third of the row spare, and spreading it into three
+       gaps reads as a scattered row rather than a nav. Centre the group and let
+       the gap set the rhythm; the row still fits one line down to 320px. */
+    justify-content: center;
+    gap: 1.1rem;
+  }
+  nav ul li a {
+    letter-spacing: 0.06em; /* 4 items affords tracking closer to the desktop 0.08em */
+  }
+}
+
+/* ==========================================================================
+   Homepage components (the redesigned content homepage — index.html only).
+   Ported from the design mockup; class names are collision-free with the
+   rest of the sheet. Tokens come from :root above.
+   ========================================================================== */
+
+/* The mockup was authored with border-box; scope it to the homepage subtree
+   so width:100%+border children (tiles, cards) don't overflow the viewport. */
+.page.home,
+.page.home *,
+.page.home *::before,
+.page.home *::after { box-sizing: border-box; }
+
+/* ----- Hero anchor (wordmark sits flat on the page) --------------------- */
+.hero-home {
+  position: relative;
+  margin: 0.48rem 0 0.4rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  /* Height follows the wordmark + this padding (no fixed aspect-ratio), so
+     it scales smoothly across the mobile/desktop breakpoint with no snap. */
+  padding: clamp(1.12rem, 4vw, 1.6rem) 1rem;
+}
+.wordmark {
+  margin: 0;
+  line-height: .92;
+  font-weight: 700;
+  letter-spacing: -.01em;
+  font-size: clamp(2.6rem, 9vw, 5.4rem);
+  font-family: 'Space Grotesk', 'Segoe UI', system-ui, sans-serif;
+  position: relative;
+  z-index: 1;
+}
+.wordmark-link,
+.wordmark-link:hover { text-decoration: none; color: inherit; }
+.wordmark .w1,
+.wordmark .w3 { /* gradient-filled blocks */
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.wordmark .w1 { background-image: linear-gradient(90deg, #103156 0%, #618692 100%); } /* foo — teal (dark→light) */
+.wordmark .w2 { color: #d4ccb8; }                                                     /* bar — cream (dimmed)  */
+.wordmark .w3 { background-image: linear-gradient(90deg, #85718e 0%, #282a5a 100%); } /* cat — lilac (light→dark) */
+
+/* Strapline under the wordmark */
+.strapline {
+  text-align: center;
+  max-width: 46rem;
+  margin: -.2rem auto 0.48rem;
+}
+.strap-lead {
+  margin: 0;
+  /* Serif (Spectral) has a smaller x-height than the sans, so the strapline
+     is sized up on desktop to keep its apparent size. */
+  font-size: clamp(1.32rem, 3.48vw, 1.8rem);
+  font-weight: 600;
+  color: #ededed;
+  letter-spacing: -.005em;
+  line-height: 1.15;
+  overflow-wrap: break-word;
+  text-wrap: balance; /* even the two lines when it wraps (mobile)*/
+}
+/* Serif fits the strapline on one line at the mobile size, so force a
+  deterministic break ("Cognition · Systems ·" / "Engineering")
+  rather than relying on natural wrap, which the vw-scaled size defeats. */
+.strap-br { display: none; }
+
+/* ----- Section eyebrow (label · rule) ----------------------------------- */
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: .8rem;
+  margin: 1.8rem 0 1.1rem;
+}
+.eyebrow .eb-label {
+  font-size: .76rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 600;
+}
+a.eb-label:hover { color: var(--accent-2); text-decoration: none; }
+.eyebrow .eb-rule {
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+.section-intro {
+  margin: -.4rem 0 1.1rem;
+  color: #b6b6b6;
+  max-width: 44rem;
+  font-size: .98rem;
+}
+/* When an intro line follows an <h2> (e.g. the Writing page's "Start here"),
+   the negative top margin above — tuned to the .eyebrow — would crush it
+   against the heading. Reset it so the gap collapses to the h2's own ~0.5rem
+   bottom margin: tight and tidy, not the browser's heavier 1em default. */
+h2 + .section-intro {
+  margin-top: 0;
+}
+
+/* ----- Writing — category tiles -------------------------------------------- */
+.tiles {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(4, 1fr);
+}
+.tile {
+  position: relative;
+  display: block;
+  border-radius: 10px;
+  overflow: hidden;
+  aspect-ratio: 4/3;
+  color: #fff;
+  border: 1px solid var(--line);
+}
+.tile img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .4s ease, filter .4s ease;
+  filter: saturate(.97) brightness(.85);
+}
+.tile::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,.82) 0%, rgba(0,0,0,.15) 55%, transparent 100%);
+}
+.tile:hover img {
+  transform: scale(1.05);
+  filter: saturate(1.05) brightness(.97);
+}
+.tile-label {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 11px;
+  z-index: 2;
+}
+.tile-label .t {
+  display: block;
+  font-family: 'Spectral', Georgia, serif;
+  font-weight: 600;
+  font-size: 1.04rem;
+  line-height: 1.2;
+  color: #fff;
+}
+
+/* ----- Writing — recent essays (3-across cards) ------------------------- */
+.recent {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 18px;
+}
+.rcard {
+  display: block;
+  color: inherit;
+}
+.rcard img {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  display: block;
+  transition: filter .3s ease;
+  filter: brightness(.92);
+}
+.rcard:hover img { filter: brightness(1.02); }
+.rcard:hover { text-decoration: none; } /* suppress global a:hover underline — highlight via colour only, like .editorial-list */
+.rcard .rt {
+  display: block;
+  margin-top: .55rem;
+  font-family: 'Spectral', Georgia, serif;
+  font-weight: 600;
+  color: #ededed;
+  font-size: 1.04rem;
+  line-height: 1.2;
+}
+.rcard:hover .rt { color: var(--accent); }
+.rcard .rm {
+  color: #9a9a9a;
+  font-size: .82rem;
+}
+
+/* "Latest" subhead above the recent cards (muted, subordinate to the
+   accent "Writing" eyebrow above it) */
+.subhead {
+  display: flex;
+  align-items: center;
+  gap: .8rem;
+  margin: 1.7rem 0 .1rem;
+}
+.subhead .sh-label {
+  font-size: .72rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: #8f8f8f;
+  font-weight: 600;
+}
+.subhead .sh-rule {
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+
+/* ----- Reusable band (About / Projects) --------------------------------- */
+.band {
+  display: flex;
+  align-items: center;
+  gap: 1.4rem;
+  background: var(--bg-raise);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 12px;
+}
+.band:hover { border-color: #3a3a3a; }
+.band .media {
+  width: 76px;
+  height: 76px;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.band .media img.logo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 0;
+}
+.band .media svg.icon {
+  width: 72px;
+  height: 72px;
+  fill: none;
+  stroke: #e5e7eb;
+  stroke-width: 4;
+}
+.band .media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+.band.about .media {
+  width: 96px;
+  height: 96px;
+}
+.band.about .media img { border-radius: 50%; }
+.band h3 {
+  margin: 0 0 .2rem;
+  font-size: 1.22rem;
+  color: #fff;
+}
+.band p {
+  margin: 0 0 .35rem;
+  color: #c4c4c4;
+  max-width: 46rem;
+}
+.band .go {
+  font-size: .9rem;
+  font-weight: 600;
+}
+
+/* ----- Homepage responsive --------------------------------------------- */
+@media (max-width: 760px) {
+  .tiles { grid-template-columns: repeat(2, 1fr); }
+  .recent { grid-template-columns: 1fr; }
+  /* Now that strap-br forces two short lines, size up from the old one-line
+     ~18px floor — the longer line ("Engineering and Systems") still clears
+     the content width down to 320px. */
+  .strap-lead { font-size: clamp(1.44rem, 6.48vw, 1.92rem); }
+  .strap-br { display: inline; } /* drop "Thinking Unbound" to a second line */
+  /* Wordmark is the page anchor — give it real presence on phones rather
+     than sitting at the desktop clamp floor. Cap chosen to meet the desktop
+     curve at 760px so there's no size jump across the breakpoint. */
+  .wordmark { font-size: clamp(3.2rem, 16vw, 4.3rem); }
+  /* Stacked full-width on phones, the larger about avatar steals width from
+     its text column, so the About card wraps narrower than the Sextant band.
+     Match the 76px media of the other bands so both text columns align.
+     Desktop keeps the roomier 96px avatar. */
+  .band.about .media { width: 76px; height: 76px; }
+}

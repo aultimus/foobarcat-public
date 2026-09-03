@@ -1,0 +1,11 @@
+{
+  "name": "Foobarcat",
+  "short_name": "Foobarcat",
+  "icons": [
+    { "src": "/assets/icons/favicon-192.png", "type": "image/png", "sizes": "192x192" },
+    { "src": "/assets/icons/favicon_512.png", "type": "image/png", "sizes": "512x512" }
+  ],
+  "theme_color": "#121212",
+  "background_color": "#121212",
+  "display": "standalone"
+}

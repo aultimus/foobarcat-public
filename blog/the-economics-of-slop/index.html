@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/icons/favicon-16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/icons/favicon-192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="/assets/icons/favicon_512.png">
+  <link rel="apple-touch-icon" href="/assets/icons/favicon-192.png">
+  <link rel="manifest" href="/assets/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="Foobarcat" href="/feed.xml"><!-- Begin Jekyll SEO tag v2.9.0 -->
+<title>The Economics of Slop | Foobarcat</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="The Economics of Slop" />
+<meta name="author" content="Matthew Ault" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Explaining why low quality output gets created, accepted, and eventually becomes prevalent; how AI exacerbates this — and how engineering organisations can restore the balance." />
+<meta name="twitter:description" property="og:description" content="Explaining why low quality output gets created, accepted, and eventually becomes prevalent; how AI exacerbates this — and how engineering organisations can restore the balance." />
+<link rel="canonical" href="https://foobarcat.com/blog/the-economics-of-slop/" />
+<meta property="og:url" content="https://foobarcat.com/blog/the-economics-of-slop/" />
+<meta property="og:site_name" content="Foobarcat" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2026-06-24T00:00:00+00:00" />
+<meta property="article:modified_time" content="2026-06-24T00:00:00+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="The Economics of Slop" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Matthew Ault"},"dateModified":"2026-06-24T00:00:00+00:00","datePublished":"2026-06-24T00:00:00+00:00","description":"Explaining why low quality output gets created, accepted, and eventually becomes prevalent; how AI exacerbates this — and how engineering organisations can restore the balance.","headline":"The Economics of Slop","mainEntityOfPage":{"@type":"WebPage","@id":"https://foobarcat.com/blog/the-economics-of-slop/"},"url":"https://foobarcat.com/blog/the-economics-of-slop/"}</script>
+<!-- End Jekyll SEO tag -->
+
+  <link rel="preload" href="/assets/fonts/spectral-600.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/spectral-700.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/public-sans.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/style.css">
+
+</head>
+<body>
+  <div class="page">
+    <nav>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/about/">About</a></li>
+        <li><a href="/blog/">Writing</a></li>
+        <li><a href="/projects/">Projects</a></li>
+      </ul>
+    </nav>
+
+    <main>
+      <article>
+        <div class="post-header">
+          <h1>The Economics of Slop</h1>
+
+          
+            <p class="post-summary">Explaining why low quality output gets created, accepted, and eventually becomes prevalent; how AI exacerbates this — and how engineering organisations can restore the balance.</p>
+          
+
+          
+          
+          
+
+          <div class="author-row">
+            <img class="author-avatar" src="/assets/avatar.webp" alt="Matthew Ault" width="44" height="44" loading="lazy">
+            <div class="author-details">
+              <p class="post-author">Matthew Ault</p>
+              <p class="post-meta author-meta"><small>
+                June 24, 2026
+                · Artificial Intelligence
+                · 10 min read
+              </small></p>
+            </div>
+          </div>
+        </div>
+        <img class="article-hero" src="/assets/blog/2026-06-24-the-economics-of-slop/hero-thumb.webp" srcset="/assets/blog/2026-06-24-the-economics-of-slop/hero-thumb.webp 480w, /assets/blog/2026-06-24-the-economics-of-slop/hero-960.webp 960w, /assets/blog/2026-06-24-the-economics-of-slop/hero.webp 1456w" sizes="(max-width:700px) calc(100vw - 48px), 752px" alt="Man inspecting a production line of slop" loading="eager">
+
+        <p>Epic History TV, a popular YouTube history channel with over 3 million subscribers ran a poll asking viewers how they felt about AI imagery in history documentaries. The response was strongly sceptical, with 24k respondents after one day and over half saying they ‘hated it’ and only 16% responding favourably. Looking at the comments, there was a visceral reaction in many people, with popular comments saying that it would be ‘enough to stop them watching’ or that it would ‘kill the channel’. From this observation, it is clear that people distrust and are increasingly reacting negatively to the introduction of AI generated artwork.</p>
+
+<p>History documentaries draw on artwork from a variety of sources. They often use period artwork, and when none exists, commission artists to create new depictions by hand. Such historical illustrations are not always contemporary, and modern reconstructions are interpretations based on an understanding of events. It is entirely possible to produce poor or anachronistic illustrations by hand. AI-generated art is no different in this regard, except that it can be produced at volume and still requires evaluation.</p>
+
+<p><img src="/assets/blog/2026-06-24-the-economics-of-slop/epic_history_tv.webp" alt="Epic History TV viewer poll" /></p>
+
+<p>The important question is not whether a human or machine generated the artefact, but why was such an artefact accepted if it was of poor quality?</p>
+
+<hr />
+
+<p>The evaluation function and the incentives which guide it determine whether an artefact (machine generated or otherwise) is accepted or rejected.</p>
+
+<p>A platform such as Youtube is governed by an algorithm which shapes the incentives and how content is evaluated. The Youtube algorithm demands consistency, with constant uploads rewarded, with delay translating to algorithmic demotion. Thumbnails and titles are selected for clickability over accuracy. Content is being pushed more and more compressed representations such as Shorts. Delivery pressure and platform incentives lead to a reduction in evaluative standards and a favouring of quantity and attention grabbing salience over quality. When you combine the immense generative capacity of AI, with a system that rewards quantity, and creates downward pressure upon standards - the predictable result is slop.</p>
+
+<p>Hence we have a decreased cost of production in a market that structurally rewards cheap goods. This is the economics of slop - or ‘sloponomics’ for short. Supply of cheap goods is high and the market mediated by the platform also keeps demand high.</p>
+
+<p>In the presence of prolonged exposure to slop, the resultant public distrust of AI is understandable. We saw a similar perception develop to the ‘Made in China’ label when Chinese manufacturing also made production cheap and abundant. But origin was never the decisive variable and today many high quality goods roll out of Chinese factories. The difference is what is incentivised and quality control. If cheap mass-produced products are demanded and rewarded by the market then they are produced and accepted. If quality is rewarded and products are held to higher standards then that is what will be produced and used.</p>
+
+<p>Such a content creator is left with a conundrum. Either, they do not use AI images, in which case they put themselves at a competitive disadvantage with peer channels over production capacity and upload frequency. Or they choose to use AI images, and face a backlash from their viewers.</p>
+
+<p>But the use of low quality AI images in history documentaries is no more inevitable than someone’s decision to use low quality Chinese tools. The employer of such commodities can evaluate their quality and decide whether to accept or reject them. The market does not subordinate free will.</p>
+
+<p>The prevalence of slop is not an inevitable consequence of the medium itself, but an interaction with the market incentives that it is introduced into. This is the economics of slop.</p>
+
+<hr />
+
+<p>This structural pattern applies to anywhere these economic conditions are present. AI production of engineering artefacts is no different. Code, documents, plans, designs and analysis are all now increasingly cheap to produce via AI.</p>
+
+<p>In the case of software, end users themselves are less likely to reject AI generation outright, as code is less observable, tangible, and culturally coded. Instead, they care if the system functions correctly. The correctness of such systems being dependent upon the evaluative function which assesses and decides whether to introduce these artefacts.</p>
+
+<p>AI does not automatically make engineering worse. But the introduction of increased generative capacity exacerbates the presence of bad engineering incentives. If an organisation rewards shipping, volume and visible output over correctness, judgement and reliability, then AI will only amplify this.</p>
+
+<p>There is evidence that this is happening, Faros AI conducted <a href="https://www.faros.ai/blog/ai-acceleration-whiplash-takeaways">a study</a> with 22,000 developers across 4,000 teams that were accelerating AI adoption. They found output up with +33% tasks completed per developer. But they also found quality down with incidents per PR up +242%. In short, output increased without accompanying value. Interestingly the report also found review time up +441% and zero-review merges up +31%. This implies quality standards are dropping and that engineers cannot keep up with reviewing AI output. The conclusion is that:</p>
+
+<p><strong>AI is making the production of artefacts cheaper than the production of understanding.</strong></p>
+
+<p>There are some things that engineers can do to adapt, they can be more discerning in the management of their scarce time, and better prioritise their attention. In <a href="https://addyosmani.com/blog/agentic-code-review/">‘Agentic Code Review’</a> Osmani identifies three factors which determine the level of oversight a change should receive:</p>
+<ul>
+  <li><strong>blast radius</strong>: what happens when it breaks. Nothing, or angry users and money and PII on the line.</li>
+  <li><strong>how long the code lives</strong>: a throwaway prototype you might rewrite next week, or a codebase you will maintain for years.</li>
+  <li><strong>how many people need to understand it</strong>: just you holding the whole thing in your head, or a team that has to share ownership over time.</li>
+</ul>
+
+<p>So the level of oversight which is ok for a throwaway prototype or internal tool is not ok for critical infrastructure. Attention should be allocated accordingly. AI can also increasingly be used to triage precious human attention, models are good at prioritising tasks, performing routine review, or automating routine processes which consume developer time and can even accelerate understanding.</p>
+
+<hr />
+
+<p>Although engineering can take measures to adapt to this change, engineering organisations are not immune to the incentives of the market. Pressure on evaluative standards exists, shipping pressure exists, business pressure exists. The reliability, maintainability and suitability of engineering systems are often hard to assess quantitatively and even harder to communicate. It often being easier to make a case for adding a feature than defending a best practice or reliability standard. As a result preventative engineering work is often under-prioritised, as discussed in my previous essay - <a href="/blog/reliability-undervalued/">Why Reliability Is Structurally Undervalued</a>. Engineering is embedded in business, and hence exposed to incentives which can create the structural conditions for slop.</p>
+
+<p>Hence good engineering practices alone are not enough. Meta, one of the most successful founder-engineer driven software companies was once known for having one of the best engineering cultures in the industry. AI fundamentally shifted that. A <a href="https://newsletter.pragmaticengineer.com/p/why-is-meta-destroying-its-engineering">recent report</a> from The Pragmatic Engineer described: AI usage became a leadership-backed signal, a significant proportion of core teams were reassigned to data labelling, token usage was assessed in performance review, whilst performance review standards became harsher. As expected engineers increasingly optimised for what was measured and rewarded. This is Goodhart’s law in practice, an overfitting to a narrow definition of value.</p>
+
+<p>The Pragmatic Engineer goes on to describe:</p>
+<blockquote>
+  <p>Meta’s core infra and security teams have suddenly found themselves severely understaffed. Most folks are pushing AI-generated code merged with AI-only reviews, without paying much attention to quality.</p>
+</blockquote>
+
+<p>This was shortly followed by the <a href="https://www.bbc.com/news/articles/c98rzr72dpyo">widely reported</a> 2026 hack where high profile accounts including Barack Obama’s were compromised via a rather embarrassing zero-auth AI support agent exploit.</p>
+
+<p>This is what happens when AI assisted cheap production aligns with measuring and prioritising that production above all else. This represents an acceleration of organisational disaster. As Mitchell Hashimoto (founder of Hashicorp), says:</p>
+
+<blockquote>
+  <p>We already learned this lesson once in infrastructure: you can automate yourself into a very resilient catastrophe machine. Systems can appear healthy by local metrics while globally becoming incomprehensible. Bug reports can go down while latent risk explodes. Test coverage can rise while semantic understanding falls. Changes happen so fast that nobody notices the underlying architecture decaying.</p>
+</blockquote>
+
+<p>This is concerning, but this doesn’t have to be our shared future as an industry. It is a collision of cheap production, and incentives that reward the wrong thing. If an org instead rewards accuracy, durability, reliability, craft, restraint, and long-term trust, AI can assist those standards too.</p>
+
+<hr />
+
+<p>So people aren’t wrong to associate AI with slop. But slop isn’t destiny.</p>
+
+<p>Engineers can adapt to ration their scarce attention and use AI to assist in review and triage. But as evidenced with Meta, engineers cannot hold the line alone, even inside a once strong engineering culture without organisational support.</p>
+
+<p>Mass production uncovers the revealed preferences of organisations, what they count, what they value, what they ultimately reward. AI only amplifies this existing reward function.</p>
+
+<p>Slop is not a failure of the medium. It is a mirror held up to the incentive system into which the medium is introduced.</p>
+
+      </article>
+    </main>
+  </div>
+
+  <footer class="site-footer">
+  <div class="foot-social">
+    
+    <a href="https://github.com/aultimus" title="GitHub" aria-label="GitHub">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5C5.37.5 0 5.78 0 12.29c0 5.2 3.44 9.6 8.21 11.16.6.11.82-.25.82-.57 0-.28-.01-1.02-.02-2-3.34.71-4.04-1.58-4.04-1.58-.55-1.36-1.33-1.73-1.33-1.73-1.09-.73.08-.71.08-.71 1.2.08 1.83 1.21 1.83 1.21 1.07 1.8 2.81 1.28 3.5.98.11-.76.42-1.28.76-1.58-2.67-.3-5.47-1.31-5.47-5.83 0-1.29.47-2.34 1.24-3.17-.12-.3-.54-1.52.12-3.16 0 0 1.01-.32 3.3 1.21a11.6 11.6 0 0 1 3-.39c1.02 0 2.05.13 3 .39 2.28-1.53 3.29-1.21 3.29-1.21.66 1.64.24 2.86.12 3.16.77.83 1.24 1.88 1.24 3.17 0 4.53-2.81 5.53-5.49 5.82.43.36.81 1.08.81 2.18 0 1.58-.01 2.85-.01 3.24 0 .32.21.69.83.57A12.02 12.02 0 0 0 24 12.29C24 5.78 18.63.5 12 .5z"/></svg></a>
+    
+    
+    <a href="https://www.linkedin.com/in/m-ault/" title="LinkedIn" aria-label="LinkedIn">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg></a>
+    
+    
+    <a href="mailto:matt@foobarcat.com" title="Email" aria-label="Email">
+      <svg class="foot-mail" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg></a>
+    
+    <a href="/feed.xml" title="RSS" aria-label="RSS">
+      <svg viewBox="3 3.44 17.56 17.56" aria-hidden="true"><path d="M6.18 15.64a2.18 2.18 0 0 1 2.18 2.18C8.36 19 7.38 20 6.18 20 5 20 4 19 4 17.82a2.18 2.18 0 0 1 2.18-2.18M4 4.44A15.56 15.56 0 0 1 19.56 20h-2.83A12.73 12.73 0 0 0 4 7.27V4.44M4 10.1A9.9 9.9 0 0 1 13.9 20h-2.83A7.07 7.07 0 0 0 4 12.93V10.1z"/></svg></a>
+  </div>
+  <div class="foot-credit">Matthew Ault &middot; &copy; 2026 &middot; foobarcat.com</div>
+</footer>
+
+</body>
+</html>

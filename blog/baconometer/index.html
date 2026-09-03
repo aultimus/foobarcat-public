@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/icons/favicon-16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/icons/favicon-192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="/assets/icons/favicon_512.png">
+  <link rel="apple-touch-icon" href="/assets/icons/favicon-192.png">
+  <link rel="manifest" href="/assets/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="Foobarcat" href="/feed.xml"><!-- Begin Jekyll SEO tag v2.9.0 -->
+<title>Building the Baconometer | Foobarcat</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="Building the Baconometer" />
+<meta name="author" content="Matthew Ault" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="How I built a film network exploration tool powered by a graph database." />
+<meta name="twitter:description" property="og:description" content="How I built a film network exploration tool powered by a graph database." />
+<link rel="canonical" href="https://foobarcat.com/blog/baconometer/" />
+<meta property="og:url" content="https://foobarcat.com/blog/baconometer/" />
+<meta property="og:site_name" content="Foobarcat" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2025-07-21T00:00:00+00:00" />
+<meta property="article:modified_time" content="2025-07-21T00:00:00+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Building the Baconometer" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Matthew Ault"},"dateModified":"2025-07-21T00:00:00+00:00","datePublished":"2025-07-21T00:00:00+00:00","description":"How I built a film network exploration tool powered by a graph database.","headline":"Building the Baconometer","mainEntityOfPage":{"@type":"WebPage","@id":"https://foobarcat.com/blog/baconometer/"},"url":"https://foobarcat.com/blog/baconometer/"}</script>
+<!-- End Jekyll SEO tag -->
+
+  <link rel="preload" href="/assets/fonts/spectral-600.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/spectral-700.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/public-sans.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/style.css">
+
+</head>
+<body>
+  <div class="page">
+    <nav>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/about/">About</a></li>
+        <li><a href="/blog/">Writing</a></li>
+        <li><a href="/projects/">Projects</a></li>
+      </ul>
+    </nav>
+
+    <main>
+      <article>
+        <div class="post-header">
+          <h1>Building the Baconometer</h1>
+
+          
+            <p class="post-summary">How I built a film network exploration tool powered by a graph database.</p>
+          
+
+          
+          
+          
+
+          <div class="author-row">
+            <img class="author-avatar" src="/assets/avatar.webp" alt="Matthew Ault" width="44" height="44" loading="lazy">
+            <div class="author-details">
+              <p class="post-author">Matthew Ault</p>
+              <p class="post-meta author-meta"><small>
+                July 21, 2025
+                · Projects
+                · 7 min read
+              </small></p>
+            </div>
+          </div>
+        </div>
+        <img class="article-hero" src="/assets/blog/2025-07-21-baconometer/hero-thumb.webp" srcset="/assets/blog/2025-07-21-baconometer/hero-thumb.webp 480w, /assets/blog/2025-07-21-baconometer/hero-960.webp 960w, /assets/blog/2025-07-21-baconometer/hero.webp 1456w" sizes="(max-width:700px) calc(100vw - 48px), 752px" alt="" loading="eager">
+
+        <p>The Baconometer is a playful yet technically interesting web app that answers the question: <em>how connected are two actors through shared films?</em> Inspired by the “Six Degrees of Kevin Bacon” game, the app computes the shortest path of collaboration between actors using movie credits. At the time of writing the baconometer is hosted <a href="https://baconometer.foobarcat.com">here</a> and the code is available <a href="https://github.com/aultimus/baconometer">here</a>. The baconometer is inspired by venerable <a href="https://oracleofbacon.org/">oracle of bacon</a>.</p>
+
+<p>The Baconometer and associated data gathering tooling were built using Windsurf. Planning was done using ChatGPT. This was an exercise to explore the capabilities of AI assisted coding tools, from planning, implementation to deployment.</p>
+
+<p>This post outlines how the Baconometer was designed and built - from database selection, and service development to deployment strategy.</p>
+
+<hr />
+
+<h2 id="the-problem">The Problem</h2>
+
+<p>At the core, the Baconometer is about finding connections in a network. Given two actors, how are they linked through shared films and co-stars? This is a classic graph problem, where nodes are actors and films, and edges represent acting roles in those films.</p>
+
+<p>Solving this efficiently for hundreds of thousands of actors and millions of credits means choosing the right data model and tools.</p>
+
+<hr />
+
+<h2 id="data-gathering-tmdb-over-imdb">Data Gathering: TMDB over IMDb</h2>
+
+<p>One of the earliest hurdles was data sourcing. IMDb data is comprehensive but comes with restrictive licensing terms that prohibit many forms of redistribution and use.</p>
+
+<p>Instead, I opted for <a href="https://www.themoviedb.org/">TMDB (The Movie Database)</a>, which offers a more permissive API and license. However, TMDB does not provide a bulk data dump like IMDb, which made ingestion less straightforward.</p>
+
+<p>To solve this, I wrote a custom TMDB crawler that recursively traverses the API:</p>
+
+<ul>
+  <li>Starting with a list of popular and credited actors</li>
+  <li>Querying their movie credits</li>
+  <li>Expanding the graph through co-actors in each film</li>
+</ul>
+
+<p>This strategy incrementally builds a usable actor–film–actor graph suitable for import into Neo4j. The crawler is available here: <a href="https://github.com/aultimus/tmdb-crawler">tmdb-crawler</a>.</p>
+
+<hr />
+
+<h2 id="design-decisions">Design Decisions</h2>
+
+<h3 id="database">Database</h3>
+
+<p>Most data problems can be solved with relational databases, indeed the Oracle of Bacon is implemented using a small SQL database — more details <a href="https://oracleofbacon.org/how.php">here</a>.</p>
+
+<p>But the Baconometer is fundamentally a graph problem:</p>
+
+<ul>
+  <li>Each actor can appear in many films</li>
+  <li>Each film can have many actors</li>
+  <li>The shortest path between two actors is a traversal problem</li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th>Feature / Aspect</th>
+      <th>Neo4j (Graph DB)</th>
+      <th>SQL (Relational DB)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Data Model</strong></td>
+      <td>Nodes and relationships (Actor, Film, ACTED_IN)</td>
+      <td>Tables with foreign keys (actors, films, credits)</td>
+    </tr>
+    <tr>
+      <td><strong>Querying connections</strong></td>
+      <td>Optimized for path traversal via <code class="language-plaintext highlighter-rouge">MATCH</code> and <code class="language-plaintext highlighter-rouge">shortestPath</code></td>
+      <td>Requires recursive CTEs or multiple joins</td>
+    </tr>
+    <tr>
+      <td><strong>Shortest path query</strong></td>
+      <td>1–2 lines in Cypher, efficient</td>
+      <td>Complex recursive SQL or application-side logic</td>
+    </tr>
+    <tr>
+      <td><strong>Performance on deep traversals</strong></td>
+      <td>Fast, native graph traversal</td>
+      <td>Slower, needs multiple joins and careful indexing</td>
+    </tr>
+    <tr>
+      <td><strong>Schema flexibility</strong></td>
+      <td>Schema-optional; easy to evolve</td>
+      <td>Rigid schema; requires migrations for changes</td>
+    </tr>
+    <tr>
+      <td><strong>Learning curve</strong></td>
+      <td>Graph model and Cypher require some learning</td>
+      <td>SQL is widely known and supported</td>
+    </tr>
+    <tr>
+      <td><strong>Tooling and ecosystem</strong></td>
+      <td>Neo4j Browser for graph visualisation</td>
+      <td>Mature RDBMS tools, but not graph-native</td>
+    </tr>
+    <tr>
+      <td><strong>Debugging data relationships</strong></td>
+      <td>Intuitive with visual graph tools</td>
+      <td>Requires interpreting JOINs or ERDs manually</td>
+    </tr>
+    <tr>
+      <td><strong>Storage efficiency</strong></td>
+      <td>Less compact, higher overhead</td>
+      <td>Very compact and efficient for tabular data</td>
+    </tr>
+    <tr>
+      <td><strong>Deployment complexity</strong></td>
+      <td>Requires Neo4j server setup</td>
+      <td>Easier and more portable with PostgreSQL/MySQL</td>
+    </tr>
+    <tr>
+      <td><strong>Maturity / portability</strong></td>
+      <td>Newer technology, evolving standards</td>
+      <td>Mature, portable, and widely adopted</td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
+  <li>The oracle of bacon uses <strong>recursive CTEs</strong> to compute paths between actors.</li>
+  <li>The system works well because:
+    <ul>
+      <li>The dataset is relatively small.</li>
+      <li>Queries are optimized and rarely change.</li>
+    </ul>
+  </li>
+  <li>However, the SQL is <strong>hard to maintain</strong> and not naturally suited to variable-length path queries.</li>
+</ul>
+
+<p>Choose Neo4j when:</p>
+
+<ul>
+  <li>You’re modelling complex, interconnected data.</li>
+  <li>You need to perform shortest-path or graph algorithms.</li>
+  <li>Your schema is evolving or semi-structured.</li>
+  <li>You want readable, expressive queries.</li>
+</ul>
+
+<p>Choose SQL when:</p>
+
+<ul>
+  <li>Your data is tabular and well-structured.</li>
+  <li>You’re working with a small dataset and don’t need recursive traversal often.</li>
+  <li>You prioritize ease of deployment and cost.</li>
+  <li>Your team is experienced with SQL and relational tooling.</li>
+</ul>
+
+<h3 id="conclusion">Conclusion</h3>
+
+<p>The Baconometer benefits from <strong>Neo4j’s graph-native capabilities</strong>, allowing it to perform efficient shortest-path queries with readable, maintainable code.</p>
+
+<p>While the <strong>Oracle of Bacon</strong> demonstrates that SQL can technically solve the same problem, it requires significantly more effort in both design and query complexity. Neo4j offers a more elegant and scalable solution for this graph-based problem.</p>
+
+<p>Neo4j provides native graph storage and a query language (<code class="language-plaintext highlighter-rouge">Cypher</code>) that’s optimized for path-finding. I saw this project as an opportunity to learn neo4j and to experiment with a graph database.</p>
+
+<p>With Neo4j, the query to find the shortest path between two actors is as simple as:</p>
+
+<div class="language-cypher highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">MATCH</span> <span class="n">path</span> <span class="o">=</span> <span class="nf">shortestPath</span><span class="ss">(</span>
+  <span class="ss">(</span><span class="py">a:</span><span class="n">Actor</span> <span class="ss">{</span><span class="py">name:</span> <span class="s1">'Kevin Bacon'</span><span class="ss">})</span><span class="o">-</span><span class="ss">[</span><span class="nc">:ACTED_IN</span><span class="o">*</span><span class="ss">]</span><span class="o">-</span><span class="ss">(</span><span class="py">b:</span><span class="n">Actor</span> <span class="ss">{</span><span class="py">name:</span> <span class="s1">'Some Other Actor'</span><span class="ss">})</span>
+<span class="ss">)</span>
+<span class="k">RETURN</span> <span class="n">path</span>
+</code></pre></div></div>
+<p>This made it a natural choice for the core database.</p>
+
+<hr />
+
+<p><img src="/assets/blog/2025-07-21-baconometer/baconometer.gif" alt="Baconometer Demo GIF" /></p>
+
+<h3 id="server-software">Server Software</h3>
+<p>Python was chosen for its ecosystem and familiarity. Flask, in particular, is:</p>
+
+<ul>
+  <li>Lightweight</li>
+  <li>Easy to integrate with background scripts and custom crawlers</li>
+  <li>Good enough for serving a simple API and UI</li>
+  <li>I wanted to practice my python and flask skills</li>
+</ul>
+
+<hr />
+
+<h2 id="service-implementation">Service Implementation</h2>
+
+<p>The Baconometer is a simple web app with a single page and a single API endpoint. The API endpoint is a Flask route that takes two actor names as input and returns the shortest path between them.</p>
+
+<p>I added scripts that enable bootstrapping the Neo4j database from either IMDb or TMDB datasets.</p>
+
+<p>I added system tests to validate the API endpoint.</p>
+
+<hr />
+
+<h2 id="hosting-and-deployment">Hosting and Deployment</h2>
+<p>Initially, I considered managed Neo4j services, but they were expensive and restrictive. I wanted full control over the database and filesystem, especially during debugging and import.</p>
+
+<p>After evaluating AWS, GCP, and some PaaS platforms, I settled on Hetzner Cloud:</p>
+
+<ul>
+  <li>Affordable (€4–10/month range)</li>
+  <li>Root access</li>
+  <li>Good hardware performance for the price</li>
+</ul>
+
+<p>Hetzner was much more affordable than AWS and co.</p>
+
+<hr />
+
+<h3 id="deployment-setup">Deployment Setup</h3>
+<p>The deployment architecture is minimal and simple:</p>
+
+<ul>
+  <li>A single Ubuntu VM (Hetzner)</li>
+  <li>System packages: Neo4j (via official APT repo), Python 3.12, pipenv</li>
+  <li>Neo4j database files and CSVs mounted in <code class="language-plaintext highlighter-rouge">/var/lib/neo4j/import/</code></li>
+  <li>Flask app served via gunicorn behind nginx.</li>
+  <li>Flask app and neo4j managed via systemd services.</li>
+  <li>Neo4j accessed over Bolt (neo4j://localhost:7687)</li>
+</ul>
+
+<p>Deployment steps were handled via a small Bash script and manual provisioning for now. Future improvements could include:</p>
+
+<ul>
+  <li>Dockerising the whole deployment stack</li>
+  <li>CI/CD hooks for auto-deploy</li>
+</ul>
+
+<hr />
+
+<p>The Baconometer is a great example of choosing the right tool for the problem. Graphs are a natural fit, and Neo4j’s expressiveness made the core logic simple. Flask and Python provided a productive backend environment, and Hetzner offered low-cost flexibility for deployment.</p>
+
+<p>This project demonstrates that you can leverage Neo4j to provide a performant and scalable solution for a graph problem in a reasonable time frame (this project was completed in a couple of weeks).</p>
+
+<p>I am excited to think about what other problems Neo4j can be targeted at.</p>
+
+<p>You can use the Baconometer now <a href="https://baconometer.foobarcat.com">here</a></p>
+
+      </article>
+    </main>
+  </div>
+
+  <footer class="site-footer">
+  <div class="foot-social">
+    
+    <a href="https://github.com/aultimus" title="GitHub" aria-label="GitHub">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5C5.37.5 0 5.78 0 12.29c0 5.2 3.44 9.6 8.21 11.16.6.11.82-.25.82-.57 0-.28-.01-1.02-.02-2-3.34.71-4.04-1.58-4.04-1.58-.55-1.36-1.33-1.73-1.33-1.73-1.09-.73.08-.71.08-.71 1.2.08 1.83 1.21 1.83 1.21 1.07 1.8 2.81 1.28 3.5.98.11-.76.42-1.28.76-1.58-2.67-.3-5.47-1.31-5.47-5.83 0-1.29.47-2.34 1.24-3.17-.12-.3-.54-1.52.12-3.16 0 0 1.01-.32 3.3 1.21a11.6 11.6 0 0 1 3-.39c1.02 0 2.05.13 3 .39 2.28-1.53 3.29-1.21 3.29-1.21.66 1.64.24 2.86.12 3.16.77.83 1.24 1.88 1.24 3.17 0 4.53-2.81 5.53-5.49 5.82.43.36.81 1.08.81 2.18 0 1.58-.01 2.85-.01 3.24 0 .32.21.69.83.57A12.02 12.02 0 0 0 24 12.29C24 5.78 18.63.5 12 .5z"/></svg></a>
+    
+    
+    <a href="https://www.linkedin.com/in/m-ault/" title="LinkedIn" aria-label="LinkedIn">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg></a>
+    
+    
+    <a href="mailto:matt@foobarcat.com" title="Email" aria-label="Email">
+      <svg class="foot-mail" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg></a>
+    
+    <a href="/feed.xml" title="RSS" aria-label="RSS">
+      <svg viewBox="3 3.44 17.56 17.56" aria-hidden="true"><path d="M6.18 15.64a2.18 2.18 0 0 1 2.18 2.18C8.36 19 7.38 20 6.18 20 5 20 4 19 4 17.82a2.18 2.18 0 0 1 2.18-2.18M4 4.44A15.56 15.56 0 0 1 19.56 20h-2.83A12.73 12.73 0 0 0 4 7.27V4.44M4 10.1A9.9 9.9 0 0 1 13.9 20h-2.83A7.07 7.07 0 0 0 4 12.93V10.1z"/></svg></a>
+  </div>
+  <div class="foot-credit">Matthew Ault &middot; &copy; 2026 &middot; foobarcat.com</div>
+</footer>
+
+</body>
+</html>

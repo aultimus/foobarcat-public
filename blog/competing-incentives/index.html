@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/icons/favicon-16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/icons/favicon-192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="/assets/icons/favicon_512.png">
+  <link rel="apple-touch-icon" href="/assets/icons/favicon-192.png">
+  <link rel="manifest" href="/assets/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="Foobarcat" href="/feed.xml"><!-- Begin Jekyll SEO tag v2.9.0 -->
+<title>Security and Engineering - Competing Incentives | Foobarcat</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="Security and Engineering - Competing Incentives" />
+<meta name="author" content="Matthew Ault" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="How Security and Engineering’s natural incentives can conflict and how they can be reconciled." />
+<meta name="twitter:description" property="og:description" content="How Security and Engineering’s natural incentives can conflict and how they can be reconciled." />
+<link rel="canonical" href="https://foobarcat.com/blog/competing-incentives/" />
+<meta property="og:url" content="https://foobarcat.com/blog/competing-incentives/" />
+<meta property="og:site_name" content="Foobarcat" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2025-11-19T00:00:00+00:00" />
+<meta property="article:modified_time" content="2025-11-19T00:00:00+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Security and Engineering - Competing Incentives" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Matthew Ault"},"dateModified":"2025-11-19T00:00:00+00:00","datePublished":"2025-11-19T00:00:00+00:00","description":"How Security and Engineering’s natural incentives can conflict and how they can be reconciled.","headline":"Security and Engineering - Competing Incentives","mainEntityOfPage":{"@type":"WebPage","@id":"https://foobarcat.com/blog/competing-incentives/"},"url":"https://foobarcat.com/blog/competing-incentives/"}</script>
+<!-- End Jekyll SEO tag -->
+
+  <link rel="preload" href="/assets/fonts/spectral-600.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/spectral-700.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/public-sans.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/style.css">
+
+</head>
+<body>
+  <div class="page">
+    <nav>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/about/">About</a></li>
+        <li><a href="/blog/">Writing</a></li>
+        <li><a href="/projects/">Projects</a></li>
+      </ul>
+    </nav>
+
+    <main>
+      <article>
+        <div class="post-header">
+          <h1>Security and Engineering - Competing Incentives</h1>
+
+          
+            <p class="post-summary">How Security and Engineering's natural incentives can conflict and how they can be reconciled.</p>
+          
+
+          
+          
+          
+
+          <div class="author-row">
+            <img class="author-avatar" src="/assets/avatar.webp" alt="Matthew Ault" width="44" height="44" loading="lazy">
+            <div class="author-details">
+              <p class="post-author">Matthew Ault</p>
+              <p class="post-meta author-meta"><small>
+                November 19, 2025
+                · Engineering Leadership
+                · 3 min read
+              </small></p>
+            </div>
+          </div>
+        </div>
+        <img class="article-hero" src="/assets/blog/2025-11-19-competing-incentives/hero-thumb.webp" srcset="/assets/blog/2025-11-19-competing-incentives/hero-thumb.webp 480w, /assets/blog/2025-11-19-competing-incentives/hero-960.webp 960w, /assets/blog/2025-11-19-competing-incentives/hero.webp 1456w" sizes="(max-width:700px) calc(100vw - 48px), 752px" alt="" loading="eager">
+
+        <p>I’ve seen a familiar pattern play out repeatedly in modern software organisations. An engineer needs to share a compiled artefact to unblock work. The most direct channel is restricted by security controls. Approved alternatives exist, but introduce enough friction that work slows and informal workarounds become tempting.</p>
+
+<p>This is not a failure of individuals. It is an example of <strong>how misaligned incentives inside an organisation can produce outcomes nobody intended.</strong></p>
+
+<hr />
+
+<p>Consider the two functions involved:</p>
+<ul>
+  <li><strong>Engineering</strong>, incentivised to move quickly, unblock teammates, ship features and provide value to the user.</li>
+  <li><strong>Security</strong>, incentivised to reduce risk and prevent incidents.</li>
+</ul>
+
+<p>Both incentives are legitimate. Both responsibilities matter. But they naturally pull in different directions. And when a policy like “block all binaries” is introduced, the tradeoff becomes asymmetric.</p>
+
+<p>To security, the change looks entirely beneficial: fewer risky files, fewer vectors. Meanwhile, to engineering, the change carries a hidden cost: added friction, slower iteration, and the temptation to route around official channels.</p>
+
+<hr />
+
+<p>Because security incidents are highly visible and inefficiency is largely invisible, organisations often treat these decisions as if they were cost-free. From a non-technical perspective, “more security” sounds like purely positive progress. But every safeguard has a price — not in money, but in time, momentum, and behavioural side-effects.</p>
+
+<p>This is how systems drift, quietly and unintentionally, toward over-restriction.<br />
+No one chooses that endpoint; the incentives simply nudge the organisation in that direction.</p>
+
+<p>And once friction gets high enough, people start creating workarounds. Not because they’re reckless, but because they’re trying to do their jobs. Ironically, these workarounds often introduce more risk than the original behaviour the policy attempted to prevent.</p>
+
+<hr />
+
+<p>Security lives on a curve of diminishing returns:</p>
+<ul>
+  <li>Too little security → real danger</li>
+  <li>Just enough security → a healthy, productive organisation</li>
+  <li>Too much security → stagnation and shadow tools</li>
+</ul>
+
+<p>We see the same pattern in many domains: well-intentioned controls create knock-on behaviours that undermine the original goal. It’s not a failure of individuals — it’s a consequence of how incentives shape behaviour.</p>
+
+<hr />
+
+<p>So what breaks the cycle?</p>
+
+<p>Leadership that understands the tradeoff — leadership that can see both the visible risks and the invisible costs.
+Leadership that invites Engineering and Security to challenge creeping friction before it calcifies into culture.
+And Security and Engineering working as partners, not opponents.</p>
+
+<p>This article is just a small introduction. In future pieces, I’ll explore incentives more deeply — showing how they quietly shape organisational behaviour, and how thoughtful incentive design can resolve undesirable outcomes and help organisations achieve their goals far more effectively.</p>
+
+      </article>
+    </main>
+  </div>
+
+  <footer class="site-footer">
+  <div class="foot-social">
+    
+    <a href="https://github.com/aultimus" title="GitHub" aria-label="GitHub">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5C5.37.5 0 5.78 0 12.29c0 5.2 3.44 9.6 8.21 11.16.6.11.82-.25.82-.57 0-.28-.01-1.02-.02-2-3.34.71-4.04-1.58-4.04-1.58-.55-1.36-1.33-1.73-1.33-1.73-1.09-.73.08-.71.08-.71 1.2.08 1.83 1.21 1.83 1.21 1.07 1.8 2.81 1.28 3.5.98.11-.76.42-1.28.76-1.58-2.67-.3-5.47-1.31-5.47-5.83 0-1.29.47-2.34 1.24-3.17-.12-.3-.54-1.52.12-3.16 0 0 1.01-.32 3.3 1.21a11.6 11.6 0 0 1 3-.39c1.02 0 2.05.13 3 .39 2.28-1.53 3.29-1.21 3.29-1.21.66 1.64.24 2.86.12 3.16.77.83 1.24 1.88 1.24 3.17 0 4.53-2.81 5.53-5.49 5.82.43.36.81 1.08.81 2.18 0 1.58-.01 2.85-.01 3.24 0 .32.21.69.83.57A12.02 12.02 0 0 0 24 12.29C24 5.78 18.63.5 12 .5z"/></svg></a>
+    
+    
+    <a href="https://www.linkedin.com/in/m-ault/" title="LinkedIn" aria-label="LinkedIn">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg></a>
+    
+    
+    <a href="mailto:matt@foobarcat.com" title="Email" aria-label="Email">
+      <svg class="foot-mail" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg></a>
+    
+    <a href="/feed.xml" title="RSS" aria-label="RSS">
+      <svg viewBox="3 3.44 17.56 17.56" aria-hidden="true"><path d="M6.18 15.64a2.18 2.18 0 0 1 2.18 2.18C8.36 19 7.38 20 6.18 20 5 20 4 19 4 17.82a2.18 2.18 0 0 1 2.18-2.18M4 4.44A15.56 15.56 0 0 1 19.56 20h-2.83A12.73 12.73 0 0 0 4 7.27V4.44M4 10.1A9.9 9.9 0 0 1 13.9 20h-2.83A7.07 7.07 0 0 0 4 12.93V10.1z"/></svg></a>
+  </div>
+  <div class="foot-credit">Matthew Ault &middot; &copy; 2026 &middot; foobarcat.com</div>
+</footer>
+
+</body>
+</html>

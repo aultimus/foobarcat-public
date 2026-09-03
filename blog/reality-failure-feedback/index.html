@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/icons/favicon-16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/icons/favicon-192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="/assets/icons/favicon_512.png">
+  <link rel="apple-touch-icon" href="/assets/icons/favicon-192.png">
+  <link rel="manifest" href="/assets/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="Foobarcat" href="/feed.xml"><!-- Begin Jekyll SEO tag v2.9.0 -->
+<title>Reality, Failure and Feedback | Foobarcat</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="Reality, Failure and Feedback" />
+<meta name="author" content="Matthew Ault" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Exposure to reality and the feedback from it determines the reliability of models and the systems which are built upon them." />
+<meta name="twitter:description" property="og:description" content="Exposure to reality and the feedback from it determines the reliability of models and the systems which are built upon them." />
+<link rel="canonical" href="https://foobarcat.com/blog/reality-failure-feedback/" />
+<meta property="og:url" content="https://foobarcat.com/blog/reality-failure-feedback/" />
+<meta property="og:site_name" content="Foobarcat" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2026-03-07T00:00:00+00:00" />
+<meta property="article:modified_time" content="2026-03-07T00:00:00+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Reality, Failure and Feedback" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Matthew Ault"},"dateModified":"2026-03-07T00:00:00+00:00","datePublished":"2026-03-07T00:00:00+00:00","description":"Exposure to reality and the feedback from it determines the reliability of models and the systems which are built upon them.","headline":"Reality, Failure and Feedback","mainEntityOfPage":{"@type":"WebPage","@id":"https://foobarcat.com/blog/reality-failure-feedback/"},"url":"https://foobarcat.com/blog/reality-failure-feedback/"}</script>
+<!-- End Jekyll SEO tag -->
+
+  <link rel="preload" href="/assets/fonts/spectral-600.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/spectral-700.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/public-sans.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/style.css">
+
+</head>
+<body>
+  <div class="page">
+    <nav>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/about/">About</a></li>
+        <li><a href="/blog/">Writing</a></li>
+        <li><a href="/projects/">Projects</a></li>
+      </ul>
+    </nav>
+
+    <main>
+      <article>
+        <div class="post-header">
+          <h1>Reality, Failure and Feedback</h1>
+
+          
+            <p class="post-summary">Exposure to reality and the feedback from it determines the reliability of models and the systems which are built upon them.</p>
+          
+
+          
+          
+          
+
+          <div class="author-row">
+            <img class="author-avatar" src="/assets/avatar.webp" alt="Matthew Ault" width="44" height="44" loading="lazy">
+            <div class="author-details">
+              <p class="post-author">Matthew Ault</p>
+              <p class="post-meta author-meta"><small>
+                March 07, 2026
+                · Engineering Leadership
+                · 7 min read
+              </small></p>
+            </div>
+          </div>
+        </div>
+        <img class="article-hero" src="/assets/blog/2026-03-07-reality-failure-feedback/hero-thumb.webp" srcset="/assets/blog/2026-03-07-reality-failure-feedback/hero-thumb.webp 480w, /assets/blog/2026-03-07-reality-failure-feedback/hero-960.webp 960w, /assets/blog/2026-03-07-reality-failure-feedback/hero.webp 1456w" sizes="(max-width:700px) calc(100vw - 48px), 752px" alt="" loading="eager">
+
+        <p>Before we trust software, we test it.</p>
+
+<p>We deliberately expose software to edge cases, simulated load, and adverse conditions. We assume fallibility and attempt to surface errors while the cost is low, the blast radius is small, and correction is straightforward.</p>
+
+<p>Testing is not about breaking things for its own sake. It is engineered contact with constraint — a deliberate attempt to expose our assumptions to reality under controlled conditions.</p>
+
+<p>In this testing process, software engineering quietly encodes a deeper epistemic principle:</p>
+<blockquote>
+  <p><strong>systems improve when exposed to corrective feedback from reality</strong>.</p>
+</blockquote>
+
+<p>When reality contradicts our assumptions, failure occurs. The faster feedback arrives and the clearer it is, the more quickly incorrect assumptions are updated.</p>
+
+<p>This essay argues that the long term health of any system depends not on how intelligent its models are, but on how directly they are exposed to reality —  and how effectively failure translates into feedback.</p>
+
+<hr />
+
+<p>There are two broad categories of tests. Firstly, tests can verify that the system behaves as specified. Suppose we train a classifier to identify cars and test it against its labelled validation set. If those tests pass, the implementation is faithful to the specification, the classifier is confirmed to behave as expected. The system is internally coherent.</p>
+
+<p>But internal coherence does not guarantee correspondence with reality. When deployed in a field trial, the classifier may fail to recognise cars parked in woodland because its training data did not include such environments. This failure arises not from incorrect implementation, but from a specification that encodes an incomplete model of the world. It is this second category of tests — testing system to reality correspondence — that will be the focus of this essay.</p>
+
+<p>A specification encodes an underlying model derived from observing and sampling reality. Such models therefore represent approximations of reality rather than reality itself. A system built to that specification represents the model made manifest and therefore inherits its assumptions.</p>
+
+<p>When such a system is exposed to reality, those assumptions may be contradicted. When this occurs, the model fails. Failure is the signal that the model does not correspond to reality. The more frequently a model is exposed to such tests, the more confident we can be in its correctness.</p>
+
+<p>As the statistician George Box observed, ‘All models are wrong, but some are useful’. Models are approximations and their continued utility depends not on perfection, but on sustained exposure to correction.</p>
+
+<hr />
+
+<p>Feedback is the corrective signal produced by failure. Its efficacy depends not only on the severity of the failure, but on how quickly the signal arrives and how clearly it can be attributed to the underlying model. When feedback is rapid and attribution is clear, correction tends to follow. Meanwhile when signals are delayed, ambiguous, or diffused across responsible parties, it may not.</p>
+
+<p>A bridge is an instantiation of a model of structural mechanics. A bridge is continually exposed to reality every time a car passes over it. Load, stress and material fatigue are not abstract — they are exercised in practice, repeatedly. When a bridge fails, it fails dramatically and undeniably. The signal is immediate. Attribution is clear. Feedback is delivered directly to those responsible. The underlying engineering assumptions must be revised. Dramatic contradiction inspires correction.</p>
+
+<p>But some systems interact with reality under different conditions. Consequences may unfold slowly. Outcomes may have multiple plausible causes. Signals may be noisy or politically mediated. In such systems, divergence may not produce decisive correction. The contact exists, but the feedback loop is weak.</p>
+
+<p>In such environments, attempts can sometimes be made to engineer tighter feedback loops. Pilot programmes and controlled trials are examples of testing applied across domains that create bounded exposure to reality. They shorten feedback loops, localise failure and clarify attribution. They cannot eliminate environmental constraints, but they introduce controlled opportunities for correction.</p>
+
+<hr />
+
+<p>Exposure to reality introduces the opportunity for failure. Failure emits a corrective signal. This signal represents feedback which can be used to update the model. This iterative refinement loop is core to the epistemic health of a model. When that loop weakens — when models are untethered from the corrective force of reality — epistemic drift emerges.</p>
+
+<p><em>Epistemic drift is the divergence of a model from reality that occurs in the absence of corrective feedback.</em></p>
+
+<p>Any system which is sufficiently insulated from reality will tend to drift. Models embedded in systems where feedback is slow, indirect or insulated are most at risk. Such models can diverge from reality slowly, with divergence accumulating unnoticed by degrees. The divergence is rarely marked by dramatic failure, but by small accumulating inconsistencies. Predictions become less reliable. Explanations grow more qualified. Confidence erodes. When correction comes, it often comes quietly, long after the model’s credibility has been undermined.</p>
+
+<p>Software engineering is abstract, yet grounded in practice. The value of early, clear feedback is understood and embodied in iterative delivery, testing and MVP scoping, so inconsistencies often do not survive contact with reality. In that sense, software engineering is drift-resistant. Yet software systems are not immune. They ossify when they are no longer meaningfully exercised, and engineers can be swept up in new technologies insufficiently exposed to real-world constraint. Drift reappears wherever exposure weakens.</p>
+
+<hr />
+
+<p>Before we trust software, we test it. Testing is one way to shorten feedback loops and expose assumptions to reality. Testing is not merely a technical practice but an embodiment of epistemic humility — a sceptical stance towards correctness that recognises that models must be open to revision lest they succumb to epistemic drift.</p>
+
+<p>Because epistemic drift is structural, the risk of drift can be evaluated. This understanding allows us to qualify our confidence in systems according to the nature of their relationship with reality.</p>
+
+<p>Some systems are insulated from reality and corrective feedback. Yet feedback loops can often be compressed and exposure to constraint can be engineered — even in bounded or controlled ways.</p>
+
+<p>Drift is not always inevitable. It is frequently the consequence of insufficient exposure to reality. Seen this way, drift is a consequence of design.</p>
+
+      </article>
+    </main>
+  </div>
+
+  <footer class="site-footer">
+  <div class="foot-social">
+    
+    <a href="https://github.com/aultimus" title="GitHub" aria-label="GitHub">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5C5.37.5 0 5.78 0 12.29c0 5.2 3.44 9.6 8.21 11.16.6.11.82-.25.82-.57 0-.28-.01-1.02-.02-2-3.34.71-4.04-1.58-4.04-1.58-.55-1.36-1.33-1.73-1.33-1.73-1.09-.73.08-.71.08-.71 1.2.08 1.83 1.21 1.83 1.21 1.07 1.8 2.81 1.28 3.5.98.11-.76.42-1.28.76-1.58-2.67-.3-5.47-1.31-5.47-5.83 0-1.29.47-2.34 1.24-3.17-.12-.3-.54-1.52.12-3.16 0 0 1.01-.32 3.3 1.21a11.6 11.6 0 0 1 3-.39c1.02 0 2.05.13 3 .39 2.28-1.53 3.29-1.21 3.29-1.21.66 1.64.24 2.86.12 3.16.77.83 1.24 1.88 1.24 3.17 0 4.53-2.81 5.53-5.49 5.82.43.36.81 1.08.81 2.18 0 1.58-.01 2.85-.01 3.24 0 .32.21.69.83.57A12.02 12.02 0 0 0 24 12.29C24 5.78 18.63.5 12 .5z"/></svg></a>
+    
+    
+    <a href="https://www.linkedin.com/in/m-ault/" title="LinkedIn" aria-label="LinkedIn">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg></a>
+    
+    
+    <a href="mailto:matt@foobarcat.com" title="Email" aria-label="Email">
+      <svg class="foot-mail" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg></a>
+    
+    <a href="/feed.xml" title="RSS" aria-label="RSS">
+      <svg viewBox="3 3.44 17.56 17.56" aria-hidden="true"><path d="M6.18 15.64a2.18 2.18 0 0 1 2.18 2.18C8.36 19 7.38 20 6.18 20 5 20 4 19 4 17.82a2.18 2.18 0 0 1 2.18-2.18M4 4.44A15.56 15.56 0 0 1 19.56 20h-2.83A12.73 12.73 0 0 0 4 7.27V4.44M4 10.1A9.9 9.9 0 0 1 13.9 20h-2.83A7.07 7.07 0 0 0 4 12.93V10.1z"/></svg></a>
+  </div>
+  <div class="foot-credit">Matthew Ault &middot; &copy; 2026 &middot; foobarcat.com</div>
+</footer>
+
+</body>
+</html>
